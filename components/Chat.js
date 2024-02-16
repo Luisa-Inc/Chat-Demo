@@ -29,7 +29,7 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
       unsubMessages = onSnapshot(q, (querySnapshot) => {
         let newMessages = [];
         querySnapshot.forEach((doc) => {
-          console.log(doc)
+          console.log(doc);
           newMessages.push({
             _id: doc.id,
             ...doc.data(),
@@ -37,18 +37,33 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
           });
         });
         setMessages(newMessages);
-        //cacheMessages(newMessages); // Cache the new messages
+        cacheMessages(newMessages); // Cache the new messages
       });
     } else {
-      //loadCachedMessages();
+      loadCachedMessages(); // load the cashed messages
     }
 
+    // Clean up code
     return () => {
       if (unsubMessages) {
         unsubMessages();
       }
     };
   }, [db, isConnected]);
+
+
+  const loadCachedMessages = async () => {
+    const cachedMessages = (await AsyncStorage.getItem("chat_messages")) || [];
+    setMessages(JSON.parse(cachedMessages));
+  };
+
+  const cacheMessages= async (listsToCache) => {
+    try {
+      await AsyncStorage.setItem("chat_messages", JSON.stringify(listsToCache));
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   useEffect(() => {
     navigation.setOptions({ title: name });

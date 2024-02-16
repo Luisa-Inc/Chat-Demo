@@ -4,7 +4,7 @@ import Chat from "./components/Chat";
 import { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { LogBox } from "react-native";
+import { LogBox, Alert } from "react-native";
 // 2.Install firebase@10.3.1 using npm.
 import { initializeApp } from "firebase/app";
 import {
