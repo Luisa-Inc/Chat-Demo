@@ -9,6 +9,7 @@ import {
   onSnapshot,
   orderBy,
 } from "firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Chat = ({ route, navigation, db, isConnected, storage }) => {
   const { name, color, userID } = route.params; // Get the name and selected background color for the chat

@@ -15,7 +15,7 @@ import {
 import { getStorage } from 'firebase/storage';
 import { useNetInfo } from "@react-native-community/netinfo";
 import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 // Firebase configuration object
