@@ -17,6 +17,7 @@ import { useNetInfo } from "@react-native-community/netinfo";
 import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 
+
 // Firebase configuration object
 const firebaseConfig = {
   apiKey: "AIzaSyD0I7yqzb-2ZUAV2FSZxA8P1Ai6XL2cx_g",

@@ -14,15 +14,15 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
   const { name, color, userID } = route.params; // Get the name and selected background color for the chat
   const [messages, setMessages] = useState([]);
 
+  // Messages database
   let unsubMessages;
-    
-
   useEffect(() => {
     if (isConnected === true) {
       if (unsubMessages) {
         unsubMessages();
       }
       unsubMessages = null;
+
       // 5. In Chat.js, fetch messages from the database in real time:
       // Listen for new messages in Firestore
       const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
@@ -36,8 +36,9 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
             createdAt: new Date(doc.data().createdAt.toMillis()),
           });
         });
-        setMessages(newMessages);
+
         cacheMessages(newMessages); // Cache the new messages
+        setMessages(newMessages);
       });
     } else {
       loadCachedMessages(); // load the cashed messages
@@ -51,13 +52,12 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
     };
   }, [db, isConnected]);
 
-
   const loadCachedMessages = async () => {
     const cachedMessages = (await AsyncStorage.getItem("chat_messages")) || [];
     setMessages(JSON.parse(cachedMessages));
   };
 
-  const cacheMessages= async (listsToCache) => {
+  const cacheMessages = async (listsToCache) => {
     try {
       await AsyncStorage.setItem("chat_messages", JSON.stringify(listsToCache));
     } catch (error) {
@@ -65,21 +65,11 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
     }
   };
 
-  useEffect(() => {
-    navigation.setOptions({ title: name });
-  }, []);
-
   // 6. Update onSend function to save sent messages on the Firestore database
   // Function to handle sending new messages
   const onSend = (newMessages) => {
     console.log("onSend function called with:", newMessages);
     addDoc(collection(db, "messages"), newMessages[0]);
-  };
-
-  // Custom rendering of the input toolbar based on network connectivity
-  const renderInputToolbar = (props) => {
-    if (isConnected) return <InputToolbar {...props} />;
-    else return null;
   };
 
   // Custom styling for chat message bubbles
@@ -89,7 +79,7 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: "#000",
+            backgroundColor: "#757083",
           },
           left: {
             backgroundColor: "#FFF",
@@ -98,6 +88,17 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
       />
     );
   };
+
+  // Custom rendering of the input toolbar based on network connectivity
+  const renderInputToolbar = (props) => {
+    if (isConnected) return <InputToolbar {...props} />;
+    else return null;
+  };
+
+  // Set user name
+  useEffect(() => {
+    navigation.setOptions({ title: name });
+  }, []);
 
   return (
     <View style={{ flex: 1, backgroundColor: color }}>
