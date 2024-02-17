@@ -10,10 +10,14 @@ import {
   orderBy,
 } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CustomActions from "./CustomActions";
+import MapView from "react-native-maps";
+import { Audio } from "expo-av";
 
 const Chat = ({ route, navigation, db, isConnected, storage }) => {
   const { name, color, userID } = route.params; // Get the name and selected background color for the chat
   const [messages, setMessages] = useState([]);
+  let soundObject = null;
 
   // Messages database
   let unsubMessages;
@@ -49,6 +53,7 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
     return () => {
       if (unsubMessages) {
         unsubMessages();
+        if (soundObject) soundObject.unloadAsync();
       }
     };
   }, [db, isConnected]);
@@ -96,10 +101,63 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
     else return null;
   };
 
+
+  // Render an action button in Inputfield
+  const renderCustomActions = (props) => {
+    return <CustomActions storage={storage} {...props} />;
+  };
+
+  // Render a MapView if the currentMessage contains location data
+  const renderCustomView = (props) => {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      return (
+        <MapView
+          style={{ width: 150, height: 100, margin: 6 }}
+          region={{
+            latitude: currentMessage.location.latitude,
+            longitude: currentMessage.location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      );
+    }
+    return null;
+  };
+
+  // Render Audio Messages
+  const renderAudioBubble = (props) => {
+    return (
+      <View {...props}>
+        <TouchableOpacity
+          style={{ backgroundColor: "#FF0", borderRadius: 10, margin: 5 }}
+          onPress={async () => {
+            try {
+              if (soundObject) soundObject.unloadAsync();
+              const { sound } = await Audio.Sound.createAsync({
+                uri: props.currentMessage.audio,
+              });
+              soundObject = sound;
+              await sound.playAsync();
+            } catch (error) {
+              console.error("Error playing audio:", error);
+            }
+          }}
+        >
+          <Text style={{ textAlign: "center", color: "black", padding: 5 }}>
+            Play Sound
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   // Set user name
   useEffect(() => {
     navigation.setOptions({ title: name });
   }, []);
+
 
   return (
     <View style={{ flex: 1, backgroundColor: color }}>
@@ -109,6 +167,9 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
         messages={messages}
         renderBubble={renderBubble}
         renderInputToolbar={renderInputToolbar}
+        renderActions={renderCustomActions}
+        renderCustomView={renderCustomView}
+        renderMessageAudio={renderAudioBubble}
         onSend={(messages) => onSend(messages)}
         // renderCustomView={renderCustomView}
         // 7. Ensure that GiftedChat will attach the correct user ID and name to the message
