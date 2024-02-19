@@ -28,15 +28,18 @@ Chat App is a mobile application built using React Native that provides a seamle
 
 ## Set up this App
 
+- Install [Node JS](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs) on your device
+- In the terminal: Install Expo globally: ```npm install -g expo-cli```
+- Sign up for an [Expo Account](https://expo.dev/) to be able to run the app on your device
 - Clone this repository.
 - Navigate to the chat-app folder and run  ```npm install ```
-- Set up Firebase for your project:
-  * Sign in at Google Firebase
-  * Create a project
-  * Set up Firestore Database (production mode)
+- Use your own Firebase configuration code:
+  * Sign in at [Google Firebase](https://firebase.google.com/)
+  * Create a Project (uncheck "Enable Google Analytics for this project")
+  * Create Database in Firestore Database (choose a close region from the dropdown, and "Start in production mode")
   * Adjust rules from  ```allow read, write: if false; ``` to  ```allow read, write: if true; ```
-  * Register app(</>) in Project Overview
+  * "Register app(</>)" in "Project Overview"
   * Navigate to the chat-app folder and install the Firebase using  ```npm install firebase ```
   * Initialize Firebase by copying and pasting the provided Firebase configuration into the App.js
-- Download Android Studio on your computer or use the Expo Go App on your mobile device
-- Run  ```npx expo start ```
+- Download Android Studio(Win) or iOS Simulator/XCode(Mac) on your computer or use the Expo Go App on your mobile device
+- Run  ```npx expo start ``` in your terminal. Follow the instruction to access the app via the iOS Simulator/Android Emulator.
