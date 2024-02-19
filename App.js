@@ -12,13 +12,10 @@ import {
   disableNetwork,
   enableNetwork,
 } from "firebase/firestore";
-import { getStorage } from 'firebase/storage';
+import { getStorage } from "firebase/storage";
 import { useNetInfo } from "@react-native-community/netinfo";
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
-
-
-
 
 // Firebase configuration object
 const firebaseConfig = {
@@ -40,7 +37,7 @@ const auth = initializeAuth(app, {
 const Stack = createNativeStackNavigator();
 
 LogBox.ignoreLogs(["AsyncStorage has been extracted from"]);
-LogBox.ignoreLogs(['@firebase/auth: Auth']);
+LogBox.ignoreLogs(["@firebase/auth: Auth"]);
 
 const App = () => {
   // Get network connection status
@@ -55,7 +52,6 @@ const App = () => {
       enableNetwork(db); // Enable Firebase Firestore network
     }
   }, [connectionStatus.isConnected]);
-
 
   // 1. Create a new Firestore database.
   // Initialize Cloud Firestore and get a reference to the service

@@ -101,7 +101,6 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
     else return null;
   };
 
-
   // Render an action button in Inputfield
   const renderCustomActions = (props) => {
     return <CustomActions storage={storage} {...props} />;
@@ -157,7 +156,6 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
   useEffect(() => {
     navigation.setOptions({ title: name });
   }, []);
-
 
   return (
     <View style={{ flex: 1, backgroundColor: color }}>
